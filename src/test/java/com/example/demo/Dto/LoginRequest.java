@@ -1,4 +1,4 @@
-package com.example.demo.Dto;
+package com.example.demo.Dto; //Objeto de Transferência de Dados
 
 public class LoginRequest {
 
@@ -21,3 +21,11 @@ public class LoginRequest {
         this.password = password;
     }
 }
+/* essa classe aqui é um transporte de dados entre o JSON e a aplicação
+exemplo:
+{
+  "username": "luiz",
+  "password": "123456"
+}
+ele transforma esse JSON em um Objeto de LoginRequest, que vai pra o sistema
+*/

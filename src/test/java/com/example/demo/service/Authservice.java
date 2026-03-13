@@ -16,16 +16,16 @@ public class Authservice {
     @Autowired
     private JwtService jwtService;
 
-    public String login(String username, String password){
+    public String login(String username, String password){ //recebe o username e password do controller
 
-        Usuario usuario = repository.findById(username).get()
+        Usuario usuario = repository.findByUsername(username) //procura o usuário no banco de dados usando o repository, se não encontrar, lança uma exceção
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if(!usuario.getPassword().equals(password)){
+        if(!usuario.getPassword().equals(password)){ //verifica se a senha fornecida é igual a senha do usuário encontrado, se não for, lança uma exceção
             throw new RuntimeException("Senha inválida");
         }
 
-        return jwtService.gerarToken(username);
+        return jwtService.gerarToken(username); //gera um token JWT usando o serviço de JWT e retorna o token para o controller
     }
 
 }
