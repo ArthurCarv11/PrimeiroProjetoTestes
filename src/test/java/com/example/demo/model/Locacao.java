@@ -16,7 +16,7 @@ public class Locacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private float valorFinal;
+    private double valorFinal;
     private LocalDate dataLocacao;
     private LocalDate dataDevolucao;
     private LocalDate dataDevolucaoReal;
@@ -34,12 +34,12 @@ public class Locacao {
         return id;
     }
 
-    public float getValorFinal() {
+    public double getValorFinal() {
         return valorFinal;
     }
 
-    public void setValorFinal(float valorFinal) {
-        this.valorFinal = valorFinal;
+    public void setValorFinal(double valor) {
+        this.valorFinal = valor;
     }
 
     public LocalDate getDataLocacao() {
