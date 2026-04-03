@@ -25,5 +25,14 @@ public class AuthController {
             request.getPassword()
         );
     }
+    @PostMapping("/register")
+    public String register(@RequestBody LoginRequest request){
+    return service.cadastrar(
+        request.getUsername(),
+        request.getPassword(),
+        "FUNCIONARIO" // role fixa, só cria funcionário por aqui
+    );
+}
+
 
 }

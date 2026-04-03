@@ -39,8 +39,10 @@ public class Locadoraservice {
 
     public Locacao alugarJogo(Long clienteId, Long jogoId, int dias){
 
-        Cliente cliente = clienteRepo.findById(clienteId).get();
-        Jogo jogo = jogoRepo.findById(jogoId).get();
+        Cliente cliente = clienteRepo.findById(clienteId)
+            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        Jogo jogo = jogoRepo.findById(jogoId)
+            .orElseThrow(() -> new RuntimeException("Jogo não encontrado"));
 
         Locacao locacao = new Locacao();
 
@@ -50,7 +52,7 @@ public class Locadoraservice {
         locacao.setDataLocacao(LocalDate.now());
         locacao.setDataDevolucao(LocalDate.now().plusDays(dias));
 
-        float valor = jogo.getPrecoBase() * dias;
+        double valor = jogo.getPrecoBase() * dias;
 
         locacao.setValorFinal(valor);
         locacao.setStatus(1);

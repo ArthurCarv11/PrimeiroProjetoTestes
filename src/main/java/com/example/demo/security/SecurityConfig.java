@@ -3,6 +3,8 @@ package com.example.demo.security;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -15,6 +17,11 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter; 
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean 
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -23,7 +30,6 @@ public class SecurityConfig {
         //ataques de falsificação de solicitação entre sites. No entanto, em APIs RESTful, geralmente não é necessário, 
         //pois as APIs são projetadas para serem stateless e não mantêm sessões.
         
-
         .sessionManagement(session -> 
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) //configura o gerenciamento de sessões para
             // ser stateless, o que significa que a aplicação não manterá estado de sessão entre as requisições (não vai
@@ -31,12 +37,11 @@ public class SecurityConfig {
         )
         
         .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated()
-        ) // configura as regras de autorização para as requisições HTTP. Neste caso, todas as requisições para endpoints
-        //que começam na rota "/auth/" são permitidas sem autenticação, enquanto todas as outras requisições exigem 
-        //autenticação.
-        
+                .requestMatchers("/auth/login").permitAll()         // login é público, qualquer um pode acessar
+                .requestMatchers("/auth/register").hasRole("ADMIN") // só ADMIN pode cadastrar novos funcionários
+                .requestMatchers("/locadora/**").hasRole("FUNCIONARIO") // só funcionários autenticados acessam as rotas da locadora
+                .anyRequest().authenticated()                       // qualquer outra rota exige autenticação
+        )
 
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); //adiciona o filtro 
         //jwtFilter antes do filtro de autenticação padrão do Spring Security
